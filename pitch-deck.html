@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe - AI-Native iOS Experience | Investor Pitch Deck</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8B5CF6;
+            --primary-light: #A78BFA;
+            --secondary: #06B6D4;
+            --accent: #F472B6;
+            --dark: #0F0F1A;
+            --darker: #08080F;
+            --card: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text: #FFFFFF;
+            --text-muted: rgba(255, 255, 255, 0.6);
+            --gradient-1: linear-gradient(135deg, #8B5CF6 0%, #06B6D4 100%);
+            --gradient-2: linear-gradient(135deg, #F472B6 0%, #8B5CF6 100%);
+            --gradient-bg: linear-gradient(180deg, #0F0F1A 0%, #1A1A2E 50%, #16213E 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--text);
+        }
+
+        .deck-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 80px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(100%);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--gradient-bg);
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+
+        .slide.prev {
+            transform: translateX(-100%);
+        }
+
+        .slide-content {
+            max-width: 1400px;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 24px;
+        }
+
+        h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            margin-bottom: 40px;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--primary-light);
+        }
+
+        p {
+            font-size: 1.25rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+        }
+
+        .gradient-text {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .highlight {
+            color: var(--primary-light);
+        }
+
+        /* Components */
+        .tag {
+            display: inline-block;
+            padding: 8px 16px;
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .grid {
+            display: grid;
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .grid-2 { grid-template-columns: repeat(2, 1fr); }
+        .grid-3 { grid-template-columns: repeat(3, 1fr); }
+        .grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 40px 24px;
+        }
+
+        .stat-value {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 12px;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* Progress bars */
+        .progress-container {
+            margin-top: 32px;
+        }
+
+        .progress-item {
+            margin-bottom: 24px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--card);
+            border-radius: 100px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-1);
+            border-radius: 100px;
+            transition: width 1s ease;
+        }
+
+        /* Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 32px;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 16px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .data-table th {
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .data-table td {
+            font-size: 1rem;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Timeline */
+        .timeline {
+            display: flex;
+            gap: 0;
+            margin-top: 40px;
+        }
+
+        .timeline-item {
+            flex: 1;
+            position: relative;
+            padding: 24px;
+            padding-top: 40px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--card);
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: 24px;
+            width: 16px;
+            height: 16px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+        }
+
+        .timeline-item.active::before {
+            background: var(--gradient-1);
+        }
+
+        .timeline-date {
+            font-weight: 700;
+            color: var(--primary-light);
+            margin-bottom: 12px;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .timeline-desc {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* Team */
+        .team-member {
+            text-align: center;
+        }
+
+        .team-avatar {
+            width: 120px;
+            height: 120px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 700;
+        }
+
+        .team-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .team-role {
+            color: var(--primary-light);
+            font-size: 0.875rem;
+            margin-bottom: 8px;
+        }
+
+        .team-bio {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* Cover slide */
+        .cover-content {
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+        .cover-title {
+            font-size: 5.5rem;
+            margin-bottom: 16px;
+        }
+
+        .cover-subtitle {
+            font-size: 1.75rem;
+            color: var(--text-muted);
+            margin-bottom: 48px;
+            font-weight: 400;
+        }
+
+        .cover-ask {
+            display: inline-block;
+            padding: 16px 32px;
+            background: var(--gradient-1);
+            border-radius: 100px;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        /* Split layout */
+        .split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .split-content h2 {
+            margin-bottom: 24px;
+        }
+
+        .split-visual {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 40px;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Funnel */
+        .funnel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .funnel-level {
+            padding: 20px 40px;
+            text-align: center;
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .funnel-level:nth-child(1) { width: 100%; background: rgba(139, 92, 246, 0.2); border-color: var(--primary); }
+        .funnel-level:nth-child(2) { width: 75%; background: rgba(6, 182, 212, 0.2); border-color: var(--secondary); }
+        .funnel-level:nth-child(3) { width: 50%; background: rgba(244, 114, 182, 0.2); border-color: var(--accent); }
+
+        .funnel-value {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .funnel-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 16px;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .progress-dots {
+            position: fixed;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .dot.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            transform: scale(1.3);
+        }
+
+        .dot:hover {
+            border-color: var(--primary);
+        }
+
+        .slide-number {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            z-index: 100;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide.active .animate {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .slide.active .animate:nth-child(1) { animation-delay: 0.1s; }
+        .slide.active .animate:nth-child(2) { animation-delay: 0.2s; }
+        .slide.active .animate:nth-child(3) { animation-delay: 0.3s; }
+        .slide.active .animate:nth-child(4) { animation-delay: 0.4s; }
+        .slide.active .animate:nth-child(5) { animation-delay: 0.5s; }
+
+        /* Glow effects */
+        .glow-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .glow-1 {
+            width: 600px;
+            height: 600px;
+            background: rgba(139, 92, 246, 0.15);
+            top: -200px;
+            right: -200px;
+        }
+
+        .glow-2 {
+            width: 400px;
+            height: 400px;
+            background: rgba(6, 182, 212, 0.1);
+            bottom: -100px;
+            left: -100px;
+        }
+
+        /* List styles */
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 1.125rem;
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-list .icon {
+            width: 32px;
+            height: 32px;
+            background: var(--gradient-1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Competitive positioning */
+        .position-chart {
+            width: 100%;
+            height: 350px;
+            position: relative;
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .axis-label {
+            position: absolute;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .axis-label.x {
+            bottom: 12px;
+            right: 12px;
+        }
+
+        .axis-label.y {
+            top: 12px;
+            left: 12px;
+        }
+
+        .competitor {
+            position: absolute;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .competitor.vibe {
+            background: var(--gradient-1);
+            font-weight: 700;
+        }
+
+        /* CTA Slide */
+        .cta-content {
+            text-align: center;
+        }
+
+        .cta-amount {
+            font-size: 6rem;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin: 40px 0;
+        }
+
+        .cta-label {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            margin-bottom: 48px;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            margin-top: 48px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-muted);
+        }
+
+        .contact-item .icon {
+            width: 40px;
+            height: 40px;
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .slide { padding: 40px 60px; }
+            h1 { font-size: 3.5rem; }
+            h2 { font-size: 2.5rem; }
+            .grid-4 { grid-template-columns: repeat(2, 1fr); }
+            .split { gap: 40px; }
+        }
+
+        @media (max-width: 768px) {
+            .slide { padding: 24px 32px; }
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .split { grid-template-columns: 1fr; }
+            .timeline { flex-direction: column; }
+            .nav { bottom: 20px; }
+            .progress-dots { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="deck-container">
+        <!-- Slide 1: Cover -->
+        <div class="slide active" data-slide="1">
+            <div class="glow-orb glow-1"></div>
+            <div class="glow-orb glow-2"></div>
+            <div class="slide-content cover-content">
+                <div class="logo animate">
+                    <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                        <rect width="80" height="80" rx="20" fill="url(#logo-gradient)"/>
+                        <path d="M25 55L40 25L55 55" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="40" cy="45" r="6" fill="white"/>
+                        <defs>
+                            <linearGradient id="logo-gradient" x1="0" y1="0" x2="80" y2="80">
+                                <stop stop-color="#8B5CF6"/>
+                                <stop offset="1" stop-color="#06B6D4"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <h1 class="cover-title animate">
+                    <span class="gradient-text">Vibe</span>
+                </h1>
+                <p class="cover-subtitle animate">AI-Native iOS Experience Platform</p>
+                <div class="cover-ask animate">Seed Round: $5M</div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Problem -->
+        <div class="slide" data-slide="2">
+            <div class="glow-orb glow-1"></div>
+            <div class="slide-content">
+                <span class="tag animate">THE PROBLEM</span>
+                <h2 class="animate">Current AI apps fail iOS users</h2>
+                <div class="grid grid-2 animate">
+                    <div class="card">
+                        <div class="card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <rect x="5" y="2" width="14" height="20" rx="2"/>
+                                <line x1="12" y1="18" x2="12" y2="18"/>
+                            </svg>
+                        </div>
+                        <h3>Non-Native Experience</h3>
+                        <p>Most AI apps are web wrappers that feel foreign on iOS. No deep system integration.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            </svg>
+                        </div>
+                        <h3>Privacy Concerns</h3>
+                        <p>All data sent to cloud servers. Users worried about sensitive information exposure.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M8 12h8"/>
+                            </svg>
+                        </div>
+                        <h3>Fragmented Workflows</h3>
+                        <p>Multiple AI tools for different tasks. Context lost between applications.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                        </div>
+                        <h3>Generic, Not Personal</h3>
+                        <p>AI doesn't truly understand individual users. Every conversation starts from zero.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Solution -->
+        <div class="slide" data-slide="3">
+            <div class="glow-orb glow-2"></div>
+            <div class="slide-content split">
+                <div class="split-content">
+                    <span class="tag animate">OUR SOLUTION</span>
+                    <h2 class="animate">AI that lives on your iPhone</h2>
+                    <ul class="feature-list animate">
+                        <li>
+                            <span class="icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </span>
+                            <span><strong>iOS-Native</strong> — Built with Swift & SwiftUI, deep system integration</span>
+                        </li>
+                        <li>
+                            <span class="icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </span>
+                            <span><strong>Privacy-First</strong> — On-device AI processing, data never leaves</span>
+                        </li>
+                        <li>
+                            <span class="icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </span>
+                            <span><strong>Truly Personal</strong> — Learns your patterns, remembers context</span>
+                        </li>
+                        <li>
+                            <span class="icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </span>
+                            <span><strong>All-in-One</strong> — Assistant, creator, and productivity suite</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="split-visual animate">
+                    <svg width="200" height="400" viewBox="0 0 200 400" fill="none">
+                        <!-- iPhone Frame -->
+                        <rect x="10" y="10" width="180" height="380" rx="40" stroke="url(#phone-gradient)" stroke-width="4" fill="rgba(15,15,26,0.8)"/>
+                        <!-- Dynamic Island -->
+                        <rect x="60" y="25" width="80" height="28" rx="14" fill="#1a1a2e"/>
+                        <!-- App UI -->
+                        <rect x="30" y="70" width="140" height="50" rx="12" fill="rgba(139,92,246,0.2)" stroke="rgba(139,92,246,0.5)" stroke-width="1"/>
+                        <rect x="30" y="130" width="140" height="80" rx="12" fill="rgba(6,182,212,0.2)" stroke="rgba(6,182,212,0.5)" stroke-width="1"/>
+                        <rect x="30" y="220" width="65" height="60" rx="12" fill="rgba(244,114,182,0.2)" stroke="rgba(244,114,182,0.5)" stroke-width="1"/>
+                        <rect x="105" y="220" width="65" height="60" rx="12" fill="rgba(139,92,246,0.2)" stroke="rgba(139,92,246,0.5)" stroke-width="1"/>
+                        <rect x="30" y="290" width="140" height="50" rx="12" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                        <!-- Home Indicator -->
+                        <rect x="70" y="365" width="60" height="5" rx="2.5" fill="rgba(255,255,255,0.3)"/>
+                        <defs>
+                            <linearGradient id="phone-gradient" x1="10" y1="10" x2="190" y2="390">
+                                <stop stop-color="#8B5CF6"/>
+                                <stop offset="1" stop-color="#06B6D4"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Product -->
+        <div class="slide" data-slide="4">
+            <div class="glow-orb glow-1"></div>
+            <div class="slide-content">
+                <span class="tag animate">PRODUCT</span>
+                <h2 class="animate">Four pillars of intelligent living</h2>
+                <div class="grid grid-4 animate">
+                    <div class="card">
+                        <div class="card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                        </div>
+                        <h3>VibeGPT</h3>
+                        <p>Context-aware AI assistant with long-term memory and voice interaction</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                <circle cx="8.5" cy="8.5" r="1.5"/>
+                                <path d="M21 15l-5-5L5 21"/>
+                            </svg>
+                        </div>
+                        <h3>Creator Suite</h3>
+                        <p>AI image generation, smart editing, and content creation tools</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                            </svg>
+                        </div>
+                        <h3>Health+</h3>
+                        <p>Apple Health integration with AI insights and smart recommendations</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2"/>
+                                <line x1="16" y1="2" x2="16" y2="6"/>
+                                <line x1="8" y1="2" x2="8" y2="6"/>
+                                <line x1="3" y1="10" x2="21" y2="10"/>
+                            </svg>
+                        </div>
+                        <h3>Productivity</h3>
+                        <p>Smart scheduling, task management, and workflow automation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Market -->
+        <div class="slide" data-slide="5">
+            <div class="glow-orb glow-2"></div>
+            <div class="slide-content">
+                <span class="tag animate">MARKET OPPORTUNITY</span>
+                <h2 class="animate">A massive, growing market</h2>
+                <div class="split animate">
+                    <div>
+                        <div class="funnel">
+                            <div class="funnel-level">
+                                <div class="funnel-value">$180B</div>
+                                <div class="funnel-label">TAM — Global Mobile App Market</div>
+                            </div>
+                            <div class="funnel-level">
+                                <div class="funnel-value">$45B</div>
+                                <div class="funnel-label">SAM — AI-Enhanced Productivity Apps</div>
+                            </div>
+                            <div class="funnel-level">
+                                <div class="funnel-value">$450M</div>
+                                <div class="funnel-label">SOM — iOS AI-Native Apps (3yr)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="card" style="background: transparent; border: none; padding: 0;">
+                            <h3 style="margin-bottom: 24px;">Market Tailwinds</h3>
+                            <div class="progress-container">
+                                <div class="progress-item">
+                                    <div class="progress-header">
+                                        <span>AI App Growth YoY</span>
+                                        <span class="highlight">+340%</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 90%;"></div>
+                                    </div>
+                                </div>
+                                <div class="progress-item">
+                                    <div class="progress-header">
+                                        <span>iOS User Premium (vs Android)</span>
+                                        <span class="highlight">4.5x</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 85%;"></div>
+                                    </div>
+                                </div>
+                                <div class="progress-item">
+                                    <div class="progress-header">
+                                        <span>On-device AI Interest</span>
+                                        <span class="highlight">72%</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 72%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Business Model -->
+        <div class="slide" data-slide="6">
+            <div class="glow-orb glow-1"></div>
+            <div class="slide-content">
+                <span class="tag animate">BUSINESS MODEL</span>
+                <h2 class="animate">Proven subscription economics</h2>
+                <div class="grid grid-2 animate">
+                    <div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Tier</th>
+                                    <th>Price</th>
+                                    <th>Target</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Free</strong></td>
+                                    <td>$0</td>
+                                    <td>User acquisition</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Pro</strong></td>
+                                    <td>$9.99/mo</td>
+                                    <td>Power users</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Ultimate</strong></td>
+                                    <td>$19.99/mo</td>
+                                    <td>Professionals</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Team</strong></td>
+                                    <td>$15/user/mo</td>
+                                    <td>Small teams</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="grid grid-2">
+                        <div class="card stat-card">
+                            <div class="stat-value">24:1</div>
+                            <div class="stat-label">LTV:CAC Ratio</div>
+                        </div>
+                        <div class="card stat-card">
+                            <div class="stat-value">$85</div>
+                            <div class="stat-label">Customer LTV</div>
+                        </div>
+                        <div class="card stat-card">
+                            <div class="stat-value">$3.50</div>
+                            <div class="stat-label">CAC</div>
+                        </div>
+                        <div class="card stat-card">
+                            <div class="stat-value">3.5%</div>
+                            <div class="stat-label">Monthly Churn</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Competition -->
+        <div class="slide" data-slide="7">
+            <div class="glow-orb glow-2"></div>
+            <div class="slide-content">
+                <span class="tag animate">COMPETITIVE LANDSCAPE</span>
+                <h2 class="animate">Differentiated positioning</h2>
+                <div class="split animate">
+                    <div class="position-chart">
+                        <span class="axis-label y">Feature Depth</span>
+                        <span class="axis-label x">iOS Experience Quality</span>
+                        <div class="competitor" style="top: 35%; left: 50%;">ChatGPT</div>
+                        <div class="competitor" style="top: 45%; left: 30%;">Copilot</div>
+                        <div class="competitor" style="top: 55%; left: 25%;">Perplexity</div>
+                        <div class="competitor" style="top: 40%; left: 35%;">Notion AI</div>
+                        <div class="competitor" style="top: 60%; left: 70%;">Apple Intelligence</div>
+                        <div class="competitor vibe" style="top: 20%; left: 75%;">Vibe</div>
+                    </div>
+                    <div>
+                        <h3>Our Moat</h3>
+                        <ul class="feature-list">
+                            <li>
+                                <span class="icon">1</span>
+                                <span><strong>Proprietary Models</strong> — Optimized for iOS & Apple Silicon</span>
+                            </li>
+                            <li>
+                                <span class="icon">2</span>
+                                <span><strong>Data Flywheel</strong> — Personalization improves with usage</span>
+                            </li>
+                            <li>
+                                <span class="icon">3</span>
+                                <span><strong>Network Effects</strong> — Community templates & sharing</span>
+                            </li>
+                            <li>
+                                <span class="icon">4</span>
+                                <span><strong>Brand Position</strong> — "AI-Native" mindshare</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Traction -->
+        <div class="slide" data-slide="8">
+            <div class="glow-orb glow-1"></div>
+            <div class="slide-content">
+                <span class="tag animate">TRACTION & VALIDATION</span>
+                <h2 class="animate">Strong early signals</h2>
+                <div class="grid grid-4 animate">
+                    <div class="card stat-card">
+                        <div class="stat-value">2.5K</div>
+                        <div class="stat-label">TestFlight Users</div>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="stat-value">52%</div>
+                        <div class="stat-label">Day 7 Retention</div>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="stat-value">47</div>
+                        <div class="stat-label">NPS Score</div>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="stat-value">34%</div>
+                        <div class="stat-label">Payment Intent</div>
+                    </div>
+                </div>
+                <div class="animate" style="margin-top: 48px;">
+                    <h3>User Feedback</h3>
+                    <div class="grid grid-3" style="margin-top: 24px;">
+                        <div class="card" style="font-style: italic; color: var(--text-muted);">
+                            "Finally an AI app that feels like it belongs on my iPhone."
+                            <div style="margin-top: 12px; color: var(--primary-light); font-style: normal; font-size: 0.875rem;">— Beta User, Product Designer</div>
+                        </div>
+                        <div class="card" style="font-style: italic; color: var(--text-muted);">
+                            "The privacy-first approach is exactly what I've been looking for."
+                            <div style="margin-top: 12px; color: var(--primary-light); font-style: normal; font-size: 0.875rem;">— Beta User, Lawyer</div>
+                        </div>
+                        <div class="card" style="font-style: italic; color: var(--text-muted);">
+                            "It actually remembers our previous conversations. Game changer."
+                            <div style="margin-top: 12px; color: var(--primary-light); font-style: normal; font-size: 0.875rem;">— Beta User, Entrepreneur</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Roadmap -->
+        <div class="slide" data-slide="9">
+            <div class="glow-orb glow-2"></div>
+            <div class="slide-content">
+                <span class="tag animate">ROADMAP</span>
+                <h2 class="animate">Path to scale</h2>
+                <div class="timeline animate">
+                    <div class="timeline-item active">
+                        <div class="timeline-date">Q1-Q2 2024</div>
+                        <div class="timeline-title">MVP Launch</div>
+                        <div class="timeline-desc">Core AI assistant, basic subscription, App Store release</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">Q3-Q4 2024</div>
+                        <div class="timeline-title">Product Expansion</div>
+                        <div class="timeline-desc">Full feature suite, 100K users milestone</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">H1 2025</div>
+                        <div class="timeline-title">Scale</div>
+                        <div class="timeline-desc">International expansion, enterprise version, 1M users</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">H2 2025</div>
+                        <div class="timeline-title">Platform</div>
+                        <div class="timeline-desc">Open API, plugin marketplace, Series A</div>
+                    </div>
+                </div>
+                <div class="animate" style="margin-top: 48px;">
+                    <h3>Financial Projections</h3>
+                    <table class="data-table" style="margin-top: 24px;">
+                        <thead>
+                            <tr>
+                                <th>Year</th>
+                                <th>Users</th>
+                                <th>Paid Conversion</th>
+                                <th>ARR</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Year 1</td>
+                                <td>100K</td>
+                                <td>8%</td>
+                                <td class="highlight">$960K</td>
+                            </tr>
+                            <tr>
+                                <td>Year 2</td>
+                                <td>500K</td>
+                                <td>12%</td>
+                                <td class="highlight">$7.2M</td>
+                            </tr>
+                            <tr>
+                                <td>Year 3</td>
+                                <td>2M</td>
+                                <td>15%</td>
+                                <td class="highlight">$36M</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Team -->
+        <div class="slide" data-slide="10">
+            <div class="glow-orb glow-1"></div>
+            <div class="slide-content">
+                <span class="tag animate">TEAM</span>
+                <h2 class="animate">Built by industry veterans</h2>
+                <div class="grid grid-3 animate">
+                    <div class="card team-member">
+                        <div class="team-avatar">JC</div>
+                        <div class="team-name">James Chen</div>
+                        <div class="team-role">CEO / Co-founder</div>
+                        <div class="team-bio">Ex-Apple Senior Engineer. 10 years iOS. Previous startup acquired.</div>
+                    </div>
+                    <div class="card team-member">
+                        <div class="team-avatar">SW</div>
+                        <div class="team-name">Sarah Wang</div>
+                        <div class="team-role">CTO / Co-founder</div>
+                        <div class="team-bio">Ex-Google Brain Researcher. ML PhD. Mobile AI specialist.</div>
+                    </div>
+                    <div class="card team-member">
+                        <div class="team-avatar">MK</div>
+                        <div class="team-name">Michael Kim</div>
+                        <div class="team-role">CPO / Co-founder</div>
+                        <div class="team-bio">Ex-Instagram Product Lead. Multiple 10M+ user products.</div>
+                    </div>
+                </div>
+                <div class="animate" style="margin-top: 48px;">
+                    <h3>Advisors</h3>
+                    <div class="grid grid-4" style="margin-top: 24px;">
+                        <div style="text-align: center;">
+                            <div style="font-weight: 600;">Alex Turner</div>
+                            <div style="font-size: 0.875rem; color: var(--text-muted);">Partner, Top-tier VC</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-weight: 600;">Emily Zhang</div>
+                            <div style="font-size: 0.875rem; color: var(--text-muted);">Former Apple VP</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-weight: 600;">Dr. Robert Lee</div>
+                            <div style="font-size: 0.875rem; color: var(--text-muted);">AI Professor, Stanford</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-weight: 600;">Lisa Park</div>
+                            <div style="font-size: 0.875rem; color: var(--text-muted);">Growth Lead, Unicorn</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: The Ask -->
+        <div class="slide" data-slide="11">
+            <div class="glow-orb glow-1"></div>
+            <div class="glow-orb glow-2"></div>
+            <div class="slide-content cta-content">
+                <span class="tag animate">THE ASK</span>
+                <h2 class="animate">Join us in building the future of AI on iOS</h2>
+                <div class="cta-amount animate">$5M</div>
+                <div class="cta-label animate">Seed Round</div>
+                <div class="grid grid-4 animate" style="max-width: 900px; margin: 0 auto;">
+                    <div class="card stat-card">
+                        <div class="stat-value" style="font-size: 2rem;">50%</div>
+                        <div class="stat-label">Product Dev</div>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="stat-value" style="font-size: 2rem;">25%</div>
+                        <div class="stat-label">Marketing</div>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="stat-value" style="font-size: 2rem;">15%</div>
+                        <div class="stat-label">Team Growth</div>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="stat-value" style="font-size: 2rem;">10%</div>
+                        <div class="stat-label">Operations</div>
+                    </div>
+                </div>
+                <div class="contact-info animate">
+                    <div class="contact-item">
+                        <span class="icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                <polyline points="22,6 12,13 2,6"/>
+                            </svg>
+                        </span>
+                        <span>investors@vibe.app</span>
+                    </div>
+                    <div class="contact-item">
+                        <span class="icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="2" y1="12" x2="22" y2="12"/>
+                                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                            </svg>
+                        </span>
+                        <span>www.vibe.app</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Thank You -->
+        <div class="slide" data-slide="12">
+            <div class="glow-orb glow-1"></div>
+            <div class="glow-orb glow-2"></div>
+            <div class="slide-content cover-content">
+                <div class="logo animate">
+                    <svg width="100" height="100" viewBox="0 0 80 80" fill="none">
+                        <rect width="80" height="80" rx="20" fill="url(#logo-gradient2)"/>
+                        <path d="M25 55L40 25L55 55" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="40" cy="45" r="6" fill="white"/>
+                        <defs>
+                            <linearGradient id="logo-gradient2" x1="0" y1="0" x2="80" y2="80">
+                                <stop stop-color="#8B5CF6"/>
+                                <stop offset="1" stop-color="#06B6D4"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <h1 class="animate" style="font-size: 4rem; margin-bottom: 24px;">Thank You</h1>
+                <p class="cover-subtitle animate">Let's shape the future of AI together</p>
+                <div class="animate" style="margin-top: 40px;">
+                    <p style="font-size: 1rem;">Press <kbd style="background: var(--card); padding: 4px 12px; border-radius: 6px; border: 1px solid var(--card-border);">←</kbd> <kbd style="background: var(--card); padding: 4px 12px; border-radius: 6px; border: 1px solid var(--card-border);">→</kbd> or click arrows to navigate</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav">
+        <button class="nav-btn" id="prevBtn" disabled>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"/>
+            </svg>
+        </button>
+        <button class="nav-btn" id="nextBtn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Progress Dots -->
+    <div class="progress-dots" id="progressDots"></div>
+
+    <!-- Slide Number -->
+    <div class="slide-number">
+        <span id="currentSlide">1</span> / <span id="totalSlides">12</span>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const progressDots = document.getElementById('progressDots');
+        const currentSlideEl = document.getElementById('currentSlide');
+        const totalSlidesEl = document.getElementById('totalSlides');
+
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+
+        // Initialize
+        totalSlidesEl.textContent = totalSlides;
+
+        // Create progress dots
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'dot' + (i === 0 ? ' active' : '');
+            dot.addEventListener('click', () => goToSlide(i));
+            progressDots.appendChild(dot);
+        }
+
+        function updateSlide() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active', 'prev');
+                if (index === currentSlide) {
+                    slide.classList.add('active');
+                } else if (index < currentSlide) {
+                    slide.classList.add('prev');
+                }
+            });
+
+            // Update dots
+            document.querySelectorAll('.dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+
+            // Update slide number
+            currentSlideEl.textContent = currentSlide + 1;
+
+            // Update buttons
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateSlide();
+        }
+
+        // Event listeners
+        nextBtn.addEventListener('click', nextSlide);
+        prevBtn.addEventListener('click', prevSlide);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                goToSlide(0);
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                goToSlide(totalSlides - 1);
+            }
+        });
+
+        // Touch support
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
